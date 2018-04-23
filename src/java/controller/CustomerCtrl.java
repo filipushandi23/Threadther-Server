@@ -22,6 +22,9 @@ public class CustomerCtrl extends UserCtrl {
         return (Boolean) new UserDAO().create(_user);
     }
     
+    public Customer getCustomer(String id){
+        return new CustomerDAO().findById(id);
+    }
     
     public User getUser(String email){
         return new UserDAO().findById(email);
@@ -32,12 +35,8 @@ public class CustomerCtrl extends UserCtrl {
         
     }
     
-    public Boolean topUp(String _customerId, Integer _balance) {
-     
-        Customer customer = new CustomerDAO().findById(_customerId);
-        customer.setBalance(_balance);
-        return new CustomerDAO().update(customer);
-        
+    public Boolean topUp(int _customerId, Integer _balance) {
+        return new CustomerDAO().topUpSaldo(_customerId, _balance);
     }
     
     public ArrayList<Transaction> seeHistory(String _customerId) {

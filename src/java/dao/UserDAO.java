@@ -15,9 +15,7 @@ public class UserDAO extends AbstractDAOClass<User> {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         Transaction t = session.beginTransaction();
-        Query q = session.createQuery("FROM User u "
-                + "WHERE u.email = :email "
-                + "AND u.password = :password");
+        Query q = session.createQuery("FROM User WHERE email = :email AND password = :password");
         q.setParameter("email", email);
         q.setParameter("password", password);
         t.commit();
@@ -33,26 +31,19 @@ public class UserDAO extends AbstractDAOClass<User> {
     public boolean update(User updObj) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
-
-        try {
-            User user = (User) session.get(
-                    User.class,
-                    updObj.getUserId());
-            user.setFirstName(updObj.getFirstName());
-            user.setLastName(updObj.getLastName());
-            user.setEmail(updObj.getEmail());
-            user.setPassword(updObj.getPassword());
-            user.setProfilePicture(updObj.getProfilePicture());
-
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            session.close();
-        }
-
-        return true;
+        
+        int result = 0;
+        Query q = session.createQuery("UPDATE User set firstName = :fn, lastName = :ln, password = :pwd,"
+                + " email = :em, profilePicture = :pic WHERE email = :em");
+        q.setParameter("fn", updObj.getFirstName());
+        q.setParameter("ln", updObj.getLastName());
+        q.setParameter("pwd", updObj.getPassword());
+        q.setParameter("em", updObj.getEmail());
+        q.setParameter("pic", updObj.getProfilePicture());
+        
+        result = q.executeUpdate();
+        tx.commit();
+        return result > 0;
     }
 
     @Override

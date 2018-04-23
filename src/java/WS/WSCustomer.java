@@ -9,6 +9,7 @@ import controller.CustomerCtrl;
 import controller.MovieCtrl;
 import dao.StudioDAO;
 import dao.CustomerDAO;
+import dao.UserDAO;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.jws.WebService;
@@ -31,14 +32,13 @@ public class WSCustomer {
     @WebMethod(operationName = "register")
     public Boolean register(@WebParam(name = "first_name") String first_name, @WebParam(name = "last_name") String last_name, @WebParam(name = "email") String email, @WebParam(name = "password") String password, @WebParam(name = "profile_picture") String profile_picture, @WebParam(name = "phone_number") Integer phone_number, @WebParam(name = "birth_date") Date birth_date) {
         User user = new User(first_name, last_name, email, password, profile_picture);
-        Customer customer = new Customer(user, 0, phone_number, birth_date);
-        user.setCustomer(customer);
         return new CustomerCtrl().register(user);
     }
     
     @WebMethod(operationName = "insertAsCustomer")
-    public boolean insertCustomer(@WebParam(name="user")User user){
-        return new CustomerDAO().insertToCustomer(user);
+    public boolean insertCustomer(@WebParam(name="user")User user,@WebParam(name="phone")int phone,
+            @WebParam(name="birthDate")Date birthDate){
+        return new CustomerDAO().insertToCustomer(user,phone,birthDate);
     }
 
     @WebMethod(operationName = "login")
@@ -51,15 +51,21 @@ public class WSCustomer {
         return new CustomerCtrl().editProfile(user);
     }
     
-    @WebMethod(operationName = "topUpSaldo")
-    public boolean topUpSaldo(@WebParam(name = "custId") String custId, @WebParam(name = "balance") int balance) {
-        return new CustomerCtrl().topUp(custId, balance);
+    @WebMethod(operationName = "getUserByEmail")
+    public User getUserByEmail(@WebParam(name = "email") String email){
+        return new UserDAO().findById(email);
     }
-
-    @WebMethod(operationName = "getUser")
-    public User getUser(@WebParam(name = "email") String email) {
-        return new CustomerCtrl().getUser(email);
+    
+    @WebMethod(operationName = "topUp")
+    public boolean topUp(@WebParam(name = "userId") int userId, @WebParam(name = "balance") int balance){
+        return new CustomerCtrl().topUp(userId, balance);
     }
+    
+    @WebMethod(operationName = "getCustomer")
+    public Customer getCustomer(@WebParam(name = "id") String id){
+        return new CustomerCtrl().getCustomer(id);
+    }
+    
 
     @WebMethod(operationName = "getShowingMovies")
     public ArrayList<Movie> getShowingMovies() {

@@ -88,11 +88,11 @@ public class MovieDAO extends AbstractDAOClass<Movie> {
             e.printStackTrace();
             return null;
         } finally {
-            if (result != null) {
-                System.out.println("THIS FUCKING AWEFUCK " + result.toString() + result.getMovieId());
-            } else {
-                System.out.println("FIND BY ID NULL");
-            }
+//            if (result != null) {
+//                System.out.println("THIS FUCKING AWEFUCK " + result.toString() + result.getMovieId());
+//            } else {
+//                System.out.println("FIND BY ID NULL");
+//            }
             session.close();
         }
 

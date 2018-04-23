@@ -12,10 +12,10 @@ import util.HibernateUtil;
 /* @author Jovin Angelico */
 public class CustomerDAO extends AbstractDAOClass<Customer> {
     
-    public boolean insertToCustomer(User user) {
+    public boolean insertToCustomer(User user,int phone, Date date) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
-        Customer c = new Customer(user, 0, 0, new Date());
+        Customer c = new Customer(user, 0, phone, date);
         try {
             session.save(c);
             tx.commit();
@@ -97,7 +97,8 @@ public class CustomerDAO extends AbstractDAOClass<Customer> {
         
         try {
             Query q = session.createQuery("FROM Customer WHERE userId = :u_id");
-            q.setParameter("u_id", Integer.parseInt(objId));
+            int uId = Integer.parseInt(objId);
+            q.setParameter("u_id", uId);
             result = (Customer) q.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,4 +110,17 @@ public class CustomerDAO extends AbstractDAOClass<Customer> {
         return result;
     }
     
+    public boolean topUpSaldo(int userId, int balance){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        int result=0;
+        Transaction tx = session.beginTransaction();
+        
+        Query q = session.createQuery("Update Customer set balance = balance + :balance where userId = :userId");
+        q.setParameter("userId", userId);
+        q.setParameter("balance", balance);
+        result = q.executeUpdate();
+        tx.commit();
+        session.close();
+        return result > 0;
+    }
 }
