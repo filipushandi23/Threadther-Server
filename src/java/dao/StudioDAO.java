@@ -71,7 +71,7 @@ public class StudioDAO extends AbstractDAOClass<Studio>{
         return result;
     }
     
-    public ArrayList<Studio> getAll(String cinema_name) {
+    public ArrayList<Studio> getStudioByCinema(String cinema_name) {
         ArrayList<Studio> tmp = getAll();
         ArrayList<Studio> result = new ArrayList<>();
         for (Studio studio : tmp) {

@@ -90,9 +90,13 @@ public class WSAdmin {
     
     @WebMethod(operationName = "getStudiosByCinemaName")
     public ArrayList<Studio> getStudiosByCinemaName(@WebParam(name="cinemaName") String cinemaName) {
-        return new StudioDAO().getAll(cinemaName);
+        return new StudioDAO().getStudioByCinema(cinemaName);
     }
     
+    @WebMethod(operationName = "getAllStudio")
+    public ArrayList<Studio> getAllStudio() {
+        return new StudioDAO().getAll();
+    }
      @WebMethod(operationName = "getAllScheduleByMovieId")
     public ArrayList<Schedule> getAllScheduleByMovieId(@WebParam(name = "movieId") int movieId) {
         return new MovieCtrl().showScheduleByMovie(movieId);
